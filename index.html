@@ -41,6 +41,10 @@
         footer {
             margin-top: 50px;
         }
+
+        .hidden:not(.always-visible) {
+            display: none;
+        }
     </style>
 </head>
 
@@ -48,24 +52,33 @@
     <h1>EC1-AT Plate Maker</h1>
     <p>This plate maker is specifically for the EC1-AT PCB (Rev 1.0 and later) and its own screw hole placement.</p>
     <form id="configForm">
-        <label for="board">Base Board:</label>
-        <select id="board">
+        <!-- Board Selection -->
+        <label for="board" class="always-visible">Base Board:</label>
+        <select id="board" class="always-visible">
             <option value="" selected disabled hidden>Choose here</option>
-            <option value="EC1-AT">EC1-AT</option>
-            <option value="W1-AT">W1-AT (beware that some bottom row options need manual changes once files are downloaded)</option>
+            <option value="W1-AT_XT_Section">W1-AT XT Section</option>
+            <option value="W1-AT_Alphas_Section">W1-AT Alphas Section (beware that some bottom row options need manual
+                changes once files are downloaded)</option>
+            <option value="W1-AT_Numpad_Section">W1-AT Numpad Section</option>
         </select>
+
+        <!-- Backspace -->
         <label for="backspace">Backspace:</label>
         <select id="backspace">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="0">Unified Backspace</option>
             <option value="1">Split Backspace</option>
         </select>
+
+        <!-- Left Shift -->
         <label for="left_shift">Left Shift:</label>
         <select id="left_shift">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="0">Unified Left Shift</option>
             <option value="1">Split Left Shift</option>
         </select>
+
+        <!-- Right Shift -->
         <label for="right_shift">Right Shift:</label>
         <select id="right_shift">
             <option value="" selected disabled hidden>Choose here</option>
@@ -73,57 +86,70 @@
             <option value="1">Split Right Shift 1.75U | 1U</option>
             <option value="2">Split Right Shift 1U | 1.75U</option>
         </select>
+
+        <!-- Enter -->
         <label for="enter">Enter:</label>
         <select id="enter">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="0">ANSI</option>
             <option value="1">ISO</option>
         </select>
+
+        <!-- Numpad + -->
         <label for="numpad_plus">Numpad +:</label>
         <select id="numpad_plus">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="0">Unified Numpad +</option>
             <option value="1">Split Numpad +</option>
         </select>
+
+        <!-- Numpad Enter -->
         <label for="numpad_enter">Numpad Enter:</label>
         <select id="numpad_enter">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="0">Unified Numpad Enter</option>
             <option value="1">Split Numpad Enter</option>
         </select>
+
+        <!-- Numpad 0 -->
         <label for="numpad_zero">Numpad 0:</label>
         <select id="numpad_zero">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="0">Unified Numpad 0</option>
             <option value="1">Split Numpad 0</option>
         </select>
+
+        <!-- Bottom Row -->
         <label for="bottom_row">Bottom Row:</label>
         <select id="bottom_row">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="0">7U WK</option>
             <option value="1">7U WKL</option>
             <option value="2">7U HHKB</option>
-            <option value="0">10U WK</option>
-            <option value="1">10U WKL</option>
-            <option value="3">6.25U</option>
-            <option value="4">Split 6.25U</option>
-            <option value="5">6U</option>
-            <option value="6">6U 2-Way Split (2U Housing)</option>
-            <option value="7">6U 2-Way Split (3U Stabs)</option>
-            <option value="8">6U 3-Way Split</option>
-            <option value="9">6U HHKB</option>
-            <option value="10">6U HHKB 2-Way Split (2U Housing)</option>
-            <option value="11">6U HHKB 2-Way Split (3U Stabs)</option>
-            <option value="12">6U HHKB 3-Way Split</option>
-            <option value="13">JIS WK</option>
-            <option value="14">JIS WKL</option>
+            <option value="3">10U WK</option>
+            <option value="4">10U WKL</option>
+            <option value="5">6.25U</option>
+            <option value="6">Split 6.25U</option>
+            <option value="7">6U</option>
+            <option value="8">6U 2-Way Split (2U Housing)</option>
+            <option value="9">6U 2-Way Split (3U Stabs)</option>
+            <option value="10">6U 3-Way Split</option>
+            <option value="11">6U HHKB</option>
+            <option value="12">6U HHKB 2-Way Split (2U Housing)</option>
+            <option value="13">6U HHKB 2-Way Split (3U Stabs)</option>
+            <option value="14">6U HHKB 3-Way Split</option>
+            <option value="15">JIS WK</option>
+            <option value="16">JIS WKL</option>
         </select>
+
+        <!-- Hole Type -->
         <label for="hole_type">Hole Type:</label>
         <select id="hole_type">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="Tapped_Holes">Tapped Holes</option>
             <option value="Densus_Inserts">Densus Inserts</option>
         </select>
+
         <button type="submit">Download</button>
     </form>
 
@@ -138,108 +164,158 @@
 
     <script>
         $(document).ready(function () {
+            function updateFieldVisibility(boardValue) {
+                // Hide all selects initially
+                $('label, select').not('#board').addClass('hidden');
+
+                // Show fields based on board selection
+                if (boardValue === "W1-AT_XT_Section") {
+                    $('#hole_type').prev('label').removeClass('hidden'); // Show labels
+                    $('#hole_type').removeClass('hidden'); // Show fields
+                } else if (boardValue === "W1-AT_Alphas_Section") {
+                    $('#backspace, #left_shift, #right_shift, #enter, #bottom_row, #hole_type').prev('label').removeClass('hidden'); // Show labels
+                    $('#backspace, #left_shift, #right_shift, #enter, #bottom_row, #hole_type').removeClass('hidden'); // Show fields
+                } else if (boardValue === "W1-AT_Numpad_Section") {
+                    $('#numpad_plus, #numpad_enter, #numpad_zero, #hole_type').prev('label').removeClass('hidden'); // Show labels
+                    $('#numpad_plus, #numpad_enter, #numpad_zero, #hole_type').removeClass('hidden'); // Show fields
+                }
+            }
+
+            // Handle board selection change
+            $('#board').change(function () {
+                const boardValue = $(this).val();
+                updateFieldVisibility(boardValue);
+            });
+
             $("#configForm").submit(function (e) {
                 e.preventDefault();
+
+                var boardValue = $("#board").val();
+                if (!boardValue) {
+                    alert("Please select a base board.");
+                    return;
+                }
+
                 var isFormFilled = true;
-                $('select').each(function () {
-                    if ($(this).val() == null) {
+                $('select').not('#board, #hole_type').each(function () {
+                    if (!$(this).hasClass('hidden') && $(this).val() == null) {
                         isFormFilled = false;
                         return false;
                     }
                 });
+
                 if (!isFormFilled) {
-                    alert("Please select all configurations.");
-                } else {
-                    var boardValue = $("#board").val();
-                    var configIndices = $('select').not('#board, #hole_type').map(function () { return $(this).val(); }).get();
-                    var holeType = $("#hole_type").val();
-                    var filename = boardValue + "_" + configIndices.join('_');
-                    if (holeType === "Densus_Inserts") {
-                        filename += "_Densus_Inserts";
-                    }
-                    filename += ".dxf";
-
-                    var fileUrl = 'https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/Plate_Indexed_Name/' + boardValue + '_Plate_Indexed_Name/' + filename;
-                    var licenseUrl = 'https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/LICENSE';
-
-                    fetch(fileUrl)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.encoding === 'base64') {
-                                var base64String = data.content.replace(/\n/g, '');
-                                var binaryString = atob(base64String);
-                                var byteArray = new Uint8Array(binaryString.length);
-                                for (var i = 0; i < binaryString.length; i++) {
-                                    byteArray[i] = binaryString.charCodeAt(i);
-                                }
-
-                                var zip = new JSZip();
-                                zip.file(filename, byteArray);
-
-                                fetch(licenseUrl)
-                                    .then(response => response.json())
-                                    .then(licenseData => {
-                                        if (licenseData.encoding === 'base64') {
-                                            var licenseBase64 = licenseData.content.replace(/\n/g, '');
-                                            var licenseBinary = atob(licenseBase64);
-                                            var licenseByteArray = new Uint8Array(licenseBinary.length);
-                                            for (var i = 0; i < licenseBinary.length; i++) {
-                                                licenseByteArray[i] = licenseBinary.charCodeAt(i);
-                                            }
-                                            zip.file("LICENSE", licenseByteArray);
-
-                                            var additionalFiles = [];
-
-                                            // Add appropriate guide files based on hole type
-                                            if (holeType === "Densus_Inserts") {
-                                                additionalFiles.push('https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/densus_ec_insert_design_guide.png',
-                                                    'https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/simple_counterbore.png');
-                                            } else if (holeType === "Tapped_Holes") {
-                                                additionalFiles.push('https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/simple_tapped.png');
-                                            }
-
-                                            // Fetch and add all additional files to the zip
-                                            Promise.all(additionalFiles.map(fileUrl => fetch(fileUrl).then(response => response.json())))
-                                                .then(fileDataArray => {
-                                                    fileDataArray.forEach(fileData => {
-                                                        if (fileData.encoding === 'base64') {
-                                                            var base64 = fileData.content.replace(/\n/g, '');
-                                                            var binary = atob(base64);
-                                                            var byteArray = new Uint8Array(binary.length);
-                                                            for (var i = 0; i < binary.length; i++) {
-                                                                byteArray[i] = binary.charCodeAt(i);
-                                                            }
-                                                            var fileName = fileData.name;
-                                                            zip.file(fileName, byteArray);
-                                                        } else {
-                                                            throw new Error('File content is not base64 encoded: ' + fileData.name);
-                                                        }
-                                                    });
-
-                                                    // Generate and save the zip file
-                                                    zip.generateAsync({ type: "blob" }).then(function (content) {
-                                                        saveAs(content, boardValue + "_" + configIndices.join('_') + (holeType === "Densus_Inserts" ? "_Densus_Inserts.zip" : holeType === "Tapped_Holes" ? "_Tapped_Holes.zip" : ".zip"));
-                                                    });
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error fetching additional files:', error);
-                                                });
-                                        } else {
-                                            throw new Error('License content is not base64 encoded');
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error fetching license:', error);
-                                    });
-                            } else {
-                                throw new Error('DXF file content is not base64 encoded');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error fetching DXF file:', error);
-                        });
+                    alert("Please select all configurations for the visible fields.");
+                    return;
                 }
+
+                var configIndices = $('select').not('#board, #hole_type').filter(function () {
+                    return !$(this).hasClass('hidden');
+                }).map(function () {
+                    return $(this).val();
+                }).get();
+
+                var holeType = $("#hole_type").val();
+                if (!holeType) {
+                    alert("Please select a hole type.");
+                    return;
+                }
+
+                if (boardValue === "W1-AT_XT_Section") {
+                    var filename = boardValue;
+                }
+                else if (boardValue === "W1-AT_Alphas_Section") {
+                    var filename = boardValue + "_" + configIndices.join('_');
+                }
+                else if (boardValue === "W1-AT_Numpad_Section") {
+                    var filename = boardValue + "_" + configIndices.join('_');
+                }
+                if (holeType === "Densus_Inserts") {
+                    filename += "_Densus_Inserts";
+                }
+                filename += ".dxf";
+
+                var fileUrl = 'https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/Plate_Indexed_Name/' + boardValue + '_Plate_Indexed_Name/' + filename;
+                var licenseUrl = 'https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/LICENSE';
+
+                fetch(fileUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.encoding === 'base64') {
+                            var base64String = data.content.replace(/\n/g, '');
+                            var binaryString = atob(base64String);
+                            var byteArray = new Uint8Array(binaryString.length);
+                            for (var i = 0; i < binaryString.length; i++) {
+                                byteArray[i] = binaryString.charCodeAt(i);
+                            }
+
+                            var zip = new JSZip();
+                            zip.file(filename, byteArray);
+
+                            fetch(licenseUrl)
+                                .then(response => response.json())
+                                .then(licenseData => {
+                                    if (licenseData.encoding === 'base64') {
+                                        var licenseBase64 = licenseData.content.replace(/\n/g, '');
+                                        var licenseBinary = atob(licenseBase64);
+                                        var licenseByteArray = new Uint8Array(licenseBinary.length);
+                                        for (var i = 0; i < licenseBinary.length; i++) {
+                                            licenseByteArray[i] = licenseBinary.charCodeAt(i);
+                                        }
+                                        zip.file("LICENSE", licenseByteArray);
+
+                                        var additionalFiles = [];
+
+                                        if (holeType === "Densus_Inserts") {
+                                            additionalFiles.push('https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/densus_ec_insert_design_guide.png',
+                                                'https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/simple_counterbore.png');
+                                        } else if (holeType === "Tapped_Holes") {
+                                            additionalFiles.push('https://api.github.com/repos/Cipulot/ec1_at-plate-maker/contents/simple_tapped.png');
+                                        }
+
+                                        Promise.all(additionalFiles.map(fileUrl => fetch(fileUrl).then(response => response.json())))
+                                            .then(fileDataArray => {
+                                                fileDataArray.forEach(fileData => {
+                                                    if (fileData.encoding === 'base64') {
+                                                        var base64 = fileData.content.replace(/\n/g, '');
+                                                        var binary = atob(base64);
+                                                        var byteArray = new Uint8Array(binary.length);
+                                                        for (var i = 0; i < binary.length; i++) {
+                                                            byteArray[i] = binary.charCodeAt(i);
+                                                        }
+                                                        var fileName = fileData.name;
+                                                        zip.file(fileName, byteArray);
+                                                    } else {
+                                                        throw new Error('File content is not base64 encoded: ' + fileData.name);
+                                                    }
+                                                });
+
+                                                zip.generateAsync({ type: "blob" }).then(function (content) {
+                                                    saveAs(content, boardValue + "_" + configIndices.join('_') + (holeType === "Densus_Inserts" ? "_Densus_Inserts.zip" : holeType === "Tapped_Holes" ? "_Tapped_Holes.zip" : ".zip"));
+                                                    alert("Reminder: Please download the other board options if needed.");
+                                                });
+                                            })
+                                            .catch(error => {
+                                                console.error('Error fetching additional files:', error);
+                                            });
+                                    } else {
+                                        throw new Error('License content is not base64 encoded');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching license:', error);
+                                });
+                        } else {
+                            throw new Error('DXF file content is not base64 encoded');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching DXF file:', error);
+                    });
             });
+
+            // Initialize fields
+            updateFieldVisibility($('#board').val());
         });
     </script>
 </body>
