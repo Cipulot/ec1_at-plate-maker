@@ -57,7 +57,8 @@
         <select id="board" class="always-visible">
             <option value="" selected disabled hidden>Choose here</option>
             <option value="W1-AT_EE-AT_XT_Section">W1-AT | EE-AT XT Section</option>
-            <option value="W1-AT_EE-AT_WKL_Alphas_Section">W1-AT | EE-AT WKL Alphas Section (beware that some bottom row options need manual
+            <option value="W1-AT_EE-AT_WKL_Alphas_Section">W1-AT | EE-AT WKL Alphas Section (beware that some bottom row
+                options need manual
                 changes once files are downloaded)</option>
             <option value="EE-AT_WK_Alphas_Section">EE-AT WK Alphas Section</option>
             <option value="W1-AT_EE-AT_Numpad_Section">W1-AT | EE-AT Numpad Section</option>
@@ -170,13 +171,17 @@
                 $('label, select').not('#board').addClass('hidden');
 
                 // Show fields based on board selection
-                if (boardValue === "W1-AT_XT_Section") {
+                if (boardValue === "W1-AT_EE-AT_XT_Section") {
                     $('#hole_type').prev('label').removeClass('hidden'); // Show labels
                     $('#hole_type').removeClass('hidden'); // Show fields
-                } else if (boardValue === "W1-AT_Alphas_Section") {
+                } else if (boardValue === "W1-AT_EE-AT_XT_Section") {
                     $('#backspace, #left_shift, #right_shift, #enter, #bottom_row, #hole_type').prev('label').removeClass('hidden'); // Show labels
                     $('#backspace, #left_shift, #right_shift, #enter, #bottom_row, #hole_type').removeClass('hidden'); // Show fields
-                } else if (boardValue === "W1-AT_Numpad_Section") {
+                }
+                else if (boardValue === "W1-AT_EE-AT_WKL_Alphas_Section") {
+                    $('#backspace, #left_shift, #right_shift, #enter, #bottom_row, #hole_type').prev('label').removeClass('hidden'); // Show labels
+                    $('#backspace, #left_shift, #right_shift, #enter, #bottom_row, #hole_type').removeClass('hidden'); // Show fields
+                } else if (boardValue === "W1-AT_EE-AT_Numpad_Section") {
                     $('#numpad_plus, #numpad_enter, #numpad_zero, #hole_type').prev('label').removeClass('hidden'); // Show labels
                     $('#numpad_plus, #numpad_enter, #numpad_zero, #hole_type').removeClass('hidden'); // Show fields
                 }
