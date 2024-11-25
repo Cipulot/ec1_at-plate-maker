@@ -227,13 +227,16 @@
                     return;
                 }
 
-                if (boardValue === "W1-AT_XT_Section") {
+                if (boardValue === "W1-AT_EE-AT_XT_Section") {
                     var filename = boardValue;
                 }
-                else if (boardValue === "W1-AT_Alphas_Section") {
+                else if (boardValue === "W1-AT_EE-AT_WKL_Alphas_Section") {
                     var filename = boardValue + "_" + configIndices.join('_');
                 }
-                else if (boardValue === "W1-AT_Numpad_Section") {
+                else if (boardValue === "EE-AT_WK_Alphas_Section") {
+                    var filename = boardValue + "_" + configIndices.join('_');
+                }
+                else if (boardValue === "W1-AT_EE-AT_Numpad_Section") {
                     var filename = boardValue + "_" + configIndices.join('_');
                 }
                 if (holeType === "Densus_Inserts") {
